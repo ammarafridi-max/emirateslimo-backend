@@ -8,8 +8,11 @@ const mongoSanitize = require('express-mongo-sanitize');
 const rateLimit = require('express-rate-limit');
 
 const AppError = require('./utils/appError');
-const userRoutes = require('./routes/user.routes');
 const globalErrorHandler = require('./controllers/error.controller');
+const userRoutes = require('./routes/user.routes');
+const vehicleRoutes = require('./routes/vehicle.routes');
+const zoneRoutes = require('./routes/zone.routes');
+const locationRoutes = require('./routes/location.routes');
 
 const app = express();
 
@@ -47,9 +50,9 @@ app.use('/api', limiter);
 const corsOptions = {
   origin: function (origin, callback) {
     const allowedOrigins = [
-      process.env.VW_FRONTEND,
-      process.env.VW_ADMIN,
-      process.env.VW_BACKEND,
+      process.env.EL_FRONTEND,
+      process.env.EL_ADMIN,
+      process.env.EL_BACKEND,
     ];
     if (!origin || allowedOrigins.includes(origin)) {
       callback(null, true);
@@ -95,6 +98,9 @@ const connectDB = async () => {
 connectDB();
 
 app.use('/api/users', userRoutes);
+app.use('/api/vehicles', vehicleRoutes);
+app.use('/api/zones', zoneRoutes);
+app.use('/api/locations', locationRoutes);
 
 // 404 handler
 // app.all('/*\w', (req, res, next) => {
